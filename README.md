@@ -19,8 +19,9 @@ duanbin/
 |------|------|
 | 小程序 | uni-app + Vue 3 + Vite |
 | 管理后台 | Vue 3 + Vite + Element Plus |
-| 后端 | Spring Boot 2.7 + MyBatis-Plus + **JDK 1.8** |
+| 后端 | Spring Boot 2.7 + MyBatis-Plus + Redis + **JDK 1.8** |
 | 数据库 | MySQL 5.7 |
+| 缓存 | Redis（端口 6333） |
 
 ## 快速启动
 

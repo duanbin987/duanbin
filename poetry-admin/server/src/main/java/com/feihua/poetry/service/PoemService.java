@@ -22,19 +22,72 @@ public class PoemService {
     private PoemLineMapper poemLineMapper;
     @Autowired
     private PoemKeywordMapper poemKeywordMapper;
+    @Autowired
+    private PoemCacheService poemCacheService;
 
     public PageResult<Poem> page(int page, int size, Integer grade) {
-        LambdaQueryWrapper<Poem> wrapper = new LambdaQueryWrapper<>();
-        if (grade != null) {
-            wrapper.eq(Poem::getGrade, grade);
+        PageResult<Poem> cached = poemCacheService.page(page, size, grade, null);
+        if (cached != null) {
+            return cached;
         }
-        wrapper.orderByDesc(Poem::getId);
-        Page<Poem> p = poemMapper.selectPage(new Page<>(page, size), wrapper);
-        p.getRecords().forEach(this::fillLines);
-        return new PageResult<>(p.getRecords(), p.getTotal(), p.getCurrent(), p.getSize());
+        return pageFromDatabase(page, size, grade, null);
     }
 
     public PageResult<Poem> pageByKeyword(int page, int size, Integer grade, Long keywordId) {
+        PageResult<Poem> cached = poemCacheService.page(page, size, grade, keywordId);
+        if (cached != null) {
+            return cached;
+        }
+        return pageFromDatabase(page, size, grade, keywordId);
+    }
+
+    public Poem getById(Long id) {
+        Poem cached = poemCacheService.getById(id);
+        if (cached != null) {
+            return cached;
+        }
+        Poem poem = poemMapper.selectById(id);
+        if (poem != null) {
+            fillLines(poem);
+            poemCacheService.reloadFromDatabase();
+        }
+        return poem;
+    }
+
+    @Transactional
+    public Poem create(Poem poem) {
+        poemMapper.insert(poem);
+        saveLines(poem.getId(), poem.getLines());
+        poemCacheService.reloadFromDatabase();
+        return getById(poem.getId());
+    }
+
+    @Transactional
+    public Poem update(Long id, Poem poem) {
+        poem.setId(id);
+        poemMapper.updateById(poem);
+        poemLineMapper.delete(new LambdaQueryWrapper<PoemLine>().eq(PoemLine::getPoemId, id));
+        saveLines(id, poem.getLines());
+        poemCacheService.reloadFromDatabase();
+        return getById(id);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        poemMapper.deleteById(id);
+        poemLineMapper.delete(new LambdaQueryWrapper<PoemLine>().eq(PoemLine::getPoemId, id));
+        poemCacheService.reloadFromDatabase();
+    }
+
+    public long count() {
+        List<Poem> all = poemCacheService.getAll();
+        if (all != null) {
+            return all.size();
+        }
+        return poemMapper.selectCount(null);
+    }
+
+    private PageResult<Poem> pageFromDatabase(int page, int size, Integer grade, Long keywordId) {
         LambdaQueryWrapper<Poem> wrapper = new LambdaQueryWrapper<>();
         if (grade != null) {
             wrapper.eq(Poem::getGrade, grade);
@@ -52,40 +105,6 @@ public class PoemService {
         Page<Poem> p = poemMapper.selectPage(new Page<>(page, size), wrapper);
         p.getRecords().forEach(this::fillLines);
         return new PageResult<>(p.getRecords(), p.getTotal(), p.getCurrent(), p.getSize());
-    }
-
-    public Poem getById(Long id) {
-        Poem poem = poemMapper.selectById(id);
-        if (poem != null) {
-            fillLines(poem);
-        }
-        return poem;
-    }
-
-    @Transactional
-    public Poem create(Poem poem) {
-        poemMapper.insert(poem);
-        saveLines(poem.getId(), poem.getLines());
-        return getById(poem.getId());
-    }
-
-    @Transactional
-    public Poem update(Long id, Poem poem) {
-        poem.setId(id);
-        poemMapper.updateById(poem);
-        poemLineMapper.delete(new LambdaQueryWrapper<PoemLine>().eq(PoemLine::getPoemId, id));
-        saveLines(id, poem.getLines());
-        return getById(id);
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        poemMapper.deleteById(id);
-        poemLineMapper.delete(new LambdaQueryWrapper<PoemLine>().eq(PoemLine::getPoemId, id));
-    }
-
-    public long count() {
-        return poemMapper.selectCount(null);
     }
 
     private void fillLines(Poem poem) {
