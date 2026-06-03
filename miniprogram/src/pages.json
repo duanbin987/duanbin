@@ -1,0 +1,34 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "飞花令"
+      }
+    },
+    {
+      "path": "pages/game/game",
+      "style": {
+        "navigationBarTitleText": "闯关"
+      }
+    },
+    {
+      "path": "pages/result/result",
+      "style": {
+        "navigationBarTitleText": "结算"
+      }
+    },
+    {
+      "path": "pages/library/library",
+      "style": {
+        "navigationBarTitleText": "诗词库"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "飞花令",
+    "navigationBarBackgroundColor": "#f5f0e8",
+    "backgroundColor": "#f5f0e8"
+  }
+}
