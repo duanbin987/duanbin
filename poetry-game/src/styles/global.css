@@ -1,0 +1,119 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f5f0e8;
+  color: #2c2c2c;
+  font-family: "STKaiti", "KaiTi", "楷体", "SimKai", serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.ink-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin: 16px auto;
+  max-width: 640px;
+}
+
+.ink-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  color: #1a1a1a;
+  letter-spacing: 6px;
+}
+
+.ink-subtitle {
+  font-size: 15px;
+  color: #888;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.pinyin {
+  font-size: 13px;
+  color: #999;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  display: block;
+  width: calc(100% - 32px);
+  max-width: 608px;
+  margin: 16px auto;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2c2c2c, #4a4a4a);
+  color: #f5f0e8;
+  border: none;
+  border-radius: 28px;
+  font-size: 16px;
+  letter-spacing: 3px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-primary:active {
+  opacity: 0.8;
+}
+
+.btn-secondary {
+  display: block;
+  width: calc(100% - 32px);
+  max-width: 608px;
+  margin: 12px auto;
+  padding: 14px 24px;
+  background: #fff;
+  color: #2c2c2c;
+  border: 1px solid #ccc;
+  border-radius: 28px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:hover {
+  background: #fafafa;
+}
+
+.page-container {
+  padding-bottom: 32px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 16px;
+  margin: 20px 16px 10px;
+  color: #666;
+}
+
+.line-text {
+  font-size: 20px;
+  line-height: 1.8;
+  letter-spacing: 3px;
+}
+
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: #888;
+  font-size: 16px;
+}
